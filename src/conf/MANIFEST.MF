@@ -1,0 +1,10 @@
+Manifest-Version: 1.0
+Package: @package@
+Extension-Name: @name@
+Specification-Version: @version@
+Specification-Vendor: LarvaLabs, Inc.
+Specification-Title: @title@
+Implementation-Version: @version@
+Implementation-Vendor: LarvaLabs, Inc.
+Implementation-Vendor-Id: 
+

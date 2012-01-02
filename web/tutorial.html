@@ -1,0 +1,184 @@
+<html>
+ <head>
+ <title>Collections with Generics - The Jakarta Commons-Collections Udpated for Java 1.5</title>
+ <link rel="stylesheet" href="styles.css" type="text/css">
+ <LINK REL="icon" HREF="favicon.gif" TYPE="image/gif">
+ <LINK REL="SHORTCUT ICON" HREF="favicon.ico">
+</html>
+<body>
+<table width="100%" height="100%" cellpadding="0" cellspacing="0">
+<tr>
+ <!-- Top Left Image -->
+ <td class="border" width="100" height="100"><img src="img/main.png" border="0"/></td>
+ <!-- Title Bar -->
+ <td class="border" height="100">
+  <table>
+   <tr><td height="10"></td></tr>
+   <tr><td class="title">&nbsp;&nbsp;Collections with Generics</td></tr>
+   <tr><td class="subtitle">The Jakarta Commons-Collections Project Udpated for Java 1.5</td></tr>
+  </table>
+ </td>
+</tr>
+<tr>
+ <!-- Menu Bar -->
+ <td id="menu" class="border" width="100" valign="top">
+ <table width="100%" cellpadding="0" cellspacing="0">
+ <tr><td height="25"/></tr>
+ <tr><td class="menuitem"><a href="index.html">Home</a></td></tr>
+ <tr><td height="4"/></tr>
+ <tr><td class="menuitem"><a href="http://sourceforge.net/project/showfiles.php?group_id=139125">Download</a></td></tr>
+ <tr><td height="4"/></tr>
+ <tr><td class="menuitem"><a href="tutorial.html">Tutorial</a></td></tr>
+ <tr><td height="4"/></tr>
+ <tr><td class="menuitem"><a href="api/index.html">Javadocs</a></td></tr>
+ <tr><td height="4"/></tr>
+ <tr><td class="menuitem"><a href="http://sf.net/projects/collections">Project Page</a></td></tr>
+ <tr><td height="4"/></tr>
+ <tr><td class="menuitem"><a href="http://sourceforge.net/forum/forum.php?forum_id=468212">Help Forums</a></td></tr>
+ </table>
+ </td>
+ <!-- Content Area -->
+ <td valign="top">
+ <table class="contentTable" height="100%" cellspacing="5">
+ <tr>
+  <td class="content">
+<!-- --------------------------- CONTENT BEGIN --------------------------- -->
+<span class="heading">What You Need</span><br>
+To use Collections with Generics, include this jar file in your classpath:
+<ul>
+ <li><code>collections-generics-4.0.jar</code>
+</ul>
+Java 1.5 or later is required to use this package.
+<p>
+<span class="heading">How To Use Collections with Generics</span><br>
+The Jakarta Commons-Collections <a href="http://jakarta.apache.org/commons/collections/userguide.html">User's Guide</a>
+explains how to use the collections. These tutorial will demonstrate how to upgrade your code to use generics with
+those collections.
+<p>
+Consider a situation where we want to store the results of a marathon.
+For each runner's name, we want to be able to efficiently look up their ranking in the race.
+Also, for each ranking, we want to be able to efficiently look up the name of the runner who finished in that place.
+Finally, we would like to be able to view the complete results of the race by ranking or by runner name.
+This can be accomplished in the Commons-Collections with an <code>OrderedBidiMap</code>.
+Here is how it we would have implemented it with the old collections (with no generics):
+<div class="code"><pre>    public static void tutorialWithoutGenerics() {
+        // Create the map
+        OrderedBidiMap map = new TreeBidiMap();
+        // Populate it with the rankings
+        map.put(3, "Joe");
+        map.put(4, "Cathy");
+        map.put(1, "Anne");
+        map.put(2, "Jim");
+        map.put(6, "Bill");
+        map.put(5, "Wendy");
+        // Get the winner
+        String winner = (String)map.get(1);
+        System.out.println("Winner: " + winner);
+        // Get Cathy's ranking
+        Integer ranking = (Integer)map.getKey("Cathy");
+        System.out.println("Cathy's ranking: " + ranking);
+        // Show all runners sorted by ranking
+        {
+            System.out.println("Runners by ranking:");
+            OrderedMapIterator iterator = map.orderedMapIterator();
+            while (iterator.hasNext()) {
+                iterator.next();
+                Integer rank = (Integer)iterator.getKey();
+                String runner = (String)iterator.getValue();
+                System.out.println("  " + rank + ": " + runner);
+            }
+        }
+        // Invert the map
+        OrderedBidiMap inverseMap = map.inverseOrderedBidiMap();
+        // Show all rankings sorted by runner name
+        {
+            System.out.println("Ranking by runner name:");
+            OrderedMapIterator iterator = inverseMap.orderedMapIterator();
+            while (iterator.hasNext()) {
+                iterator.next();
+                String runner = (String)iterator.getKey();
+                Integer rank = (Integer)iterator.getValue();
+                System.out.println("  " + runner + "(" + rank + ")");
+            }
+        }
+    }
+</pre></div>
+Now, here is the same code, but with the generics added:
+<div class="code"><pre>    public static void tutorialWithGenerics() {
+        // Create the map
+        OrderedBidiMap<font color="blue">&lt;Integer, String&gt;</font> map = new TreeBidiMap<font color="blue">&lt;Integer, String&gt;</font>();
+        // Populate it with the rankings
+        map.put(3, "Joe");
+        map.put(4, "Cathy");
+        map.put(1, "Anne");
+        map.put(2, "Jim");
+        map.put(6, "Bill");
+        map.put(5, "Wendy");
+        // Get the winner
+        String winner = map.get(1);
+        System.out.println("Winner: " + winner);
+        // Get Cathy's ranking
+        Integer ranking = map.getKey("Cathy");
+        System.out.println("Cathy's ranking: " + ranking);
+        // Show all runners sorted by ranking
+        {
+            System.out.println("Runners by ranking:");
+            OrderedMapIterator<font color="blue">&lt;Integer, String&gt;</font> iterator = map.orderedMapIterator();
+            while (iterator.hasNext()) {
+                iterator.next();
+                Integer rank = iterator.getKey();
+                String runner = iterator.getValue();
+                System.out.println("  " + rank + ": " + runner);
+            }
+        }
+        // Invert the map
+        OrderedBidiMap<font color="blue">&lt;String, Integer&gt;</font> inverseMap = map.inverseOrderedBidiMap();
+        // Show all rankings sorted by runner name
+        {
+            System.out.println("Ranking by runner name:");
+            OrderedMapIterator<font color="blue">&lt;String,Integer&gt;</font> iterator = inverseMap.orderedMapIterator();
+            while (iterator.hasNext()) {
+                iterator.next();
+                String runner = iterator.getKey();
+                Integer rank = iterator.getValue();
+                System.out.println("  " + runner + "(" + rank + ")");
+            }
+        }
+    }
+</pre></div>
+Notice how there are <b>no</b> casts in the second listing.
+The code is also much more clear and understandable.
+Incidentally, the result of running the above code is:
+<div class="code"><pre>Winner: Anne
+Cathy's ranking: 4
+Runners by ranking:
+  1: Anne
+  2: Jim
+  3: Joe
+  4: Cathy
+  5: Wendy
+  6: Bill
+Ranking by runner name:
+  Anne(1)
+  Bill(6)
+  Cathy(4)
+  Jim(2)
+  Joe(3)
+  Wendy(5)
+</pre></div>
+
+<!-- ---------------------------- CONTENT END ---------------------------- -->
+  </td>
+ </tr>
+ <tr>
+   <td align="right"><a href="http://sourceforge.net"><img src="http://sourceforge.net/sflogo.php?group_id=139125&amp;type=1" width="88" height="31" border="0" alt="SourceForge.net Logo" /></a></td>
+ </tr>
+ <tr>
+  <td class="copyright">&copy;2005 <a href="http://streamsicle.com/matthall">Matt Hall</a> and <a href="http://tronics.org/watkinson">John Watkinson</a></td>
+ </tr>
+ </table>
+ </td>
+</tr>
+</table>
+</body>
+</html>
