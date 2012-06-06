@@ -23,7 +23,7 @@ Finally, we would like to be able to view the complete results of the race by ra
 This can be accomplished in the Commons-Collections with an `OrderedBidiMap`.
 
 Here is how it we would have implemented it with the old collections (with no generics):
-
+```java
     public static void tutorialWithoutGenerics() {
         // Create the map
         OrderedBidiMap map = new TreeBidiMap();
@@ -65,12 +65,12 @@ Here is how it we would have implemented it with the old collections (with no ge
             }
         }
     }
-
+```
 Now, here is the same code, but with the generics added:
-
+```java
     public static void tutorialWithGenerics() {
         // Create the map
-        OrderedBidiMap<font color="blue">&lt;Integer, String&gt;</font> map = new TreeBidiMap<font color="blue">&lt;Integer, String&gt;</font>();
+        OrderedBidiMap<Integer, String> map = new TreeBidiMap<Integer, String>();
         // Populate it with the rankings
         map.put(3, "Joe");
         map.put(4, "Cathy");
@@ -87,7 +87,7 @@ Now, here is the same code, but with the generics added:
         // Show all runners sorted by ranking
         {
             System.out.println("Runners by ranking:");
-            OrderedMapIterator<font color="blue">&lt;Integer, String&gt;</font> iterator = map.orderedMapIterator();
+            OrderedMapIterator<Integer, String> iterator = map.orderedMapIterator();
             while (iterator.hasNext()) {
                 iterator.next();
                 Integer rank = iterator.getKey();
@@ -96,11 +96,11 @@ Now, here is the same code, but with the generics added:
             }
         }
         // Invert the map
-        OrderedBidiMap<font color="blue">&lt;String, Integer&gt;</font> inverseMap = map.inverseOrderedBidiMap();
+        OrderedBidiMap<String, Integer> inverseMap = map.inverseOrderedBidiMap();
         // Show all rankings sorted by runner name
         {
             System.out.println("Ranking by runner name:");
-            OrderedMapIterator<font color="blue">&lt;String,Integer&gt;</font> iterator = inverseMap.orderedMapIterator();
+            OrderedMapIterator<String,Integer> iterator = inverseMap.orderedMapIterator();
             while (iterator.hasNext()) {
                 iterator.next();
                 String runner = iterator.getKey();
@@ -109,9 +109,10 @@ Now, here is the same code, but with the generics added:
             }
         }
     }
+```
 
 Notice how there are no casts in the second listing. The code is also much more clear and understandable. Incidentally, the result of running the above code is:
-
+```java
     Winner: Anne
     Cathy's ranking: 4
     Runners by ranking:
@@ -128,3 +129,4 @@ Notice how there are no casts in the second listing. The code is also much more 
       Jim(2)
       Joe(3)
       Wendy(5)
+```
